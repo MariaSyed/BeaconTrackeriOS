@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0EAFAF20384E04001D6C2E /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0EAFAD20384E04001D6C2E /* Person+CoreDataClass.swift */; };
+		4D0EAFB020384E04001D6C2E /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0EAFAE20384E04001D6C2E /* Person+CoreDataProperties.swift */; };
 		4D829320202F774B000E4C75 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82931F202F774B000E4C75 /* Observer.swift */; };
 		4D829322202F7757000E4C75 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D829321202F7757000E4C75 /* Observable.swift */; };
 		4DB8AEAF2028A85800D03118 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB8AEAE2028A85800D03118 /* AppDelegate.swift */; };
@@ -23,6 +25,8 @@
 
 /* Begin PBXFileReference section */
 		0847BFE2AF041307F6816D85 /* Pods-ProjectBeacons.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectBeacons.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ProjectBeacons/Pods-ProjectBeacons.debug.xcconfig"; sourceTree = "<group>"; };
+		4D0EAFAD20384E04001D6C2E /* Person+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4D0EAFAE20384E04001D6C2E /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4D82931F202F774B000E4C75 /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		4D829321202F7757000E4C75 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		4DB8AEAB2028A85800D03118 /* ProjectBeacons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectBeacons.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +59,8 @@
 		4D829318202F75FD000E4C75 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4D0EAFAD20384E04001D6C2E /* Person+CoreDataClass.swift */,
+				4D0EAFAE20384E04001D6C2E /* Person+CoreDataProperties.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -233,12 +239,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ProjectBeacons/Pods-ProjectBeacons-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -272,7 +280,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D0EAFAF20384E04001D6C2E /* Person+CoreDataClass.swift in Sources */,
 				4DB8AEC42029107400D03118 /* LocationsTableViewCell.swift in Sources */,
+				4D0EAFB020384E04001D6C2E /* Person+CoreDataProperties.swift in Sources */,
 				4D829320202F774B000E4C75 /* Observer.swift in Sources */,
 				4DD999B2202EE5DE00E56D82 /* Model.xcdatamodeld in Sources */,
 				4DB8AEB12028A85800D03118 /* ViewController.swift in Sources */,

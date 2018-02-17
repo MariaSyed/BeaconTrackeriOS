@@ -89,7 +89,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="M14-48-yEN" kind="show" identifier="showLocations" id="Uwa-jl-NqI"/>
+                                            <action selector="onEnter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iMR-t3-nLH"/>
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="eBQ-pP-BrI">
@@ -139,7 +139,7 @@
         <!--Locations-->
         <scene sceneID="9L3-ik-rhg">
             <objects>
-                <tableViewController id="gyA-Uz-U2S" customClass="LocationsTableViewController" customModule="ProjectBeacons" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="LocationsTableViewController" id="gyA-Uz-U2S" customClass="LocationsTableViewController" customModule="ProjectBeacons" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="cjv-rF-CCq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -173,6 +173,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="profileImage" destination="Yp9-mC-6xh" id="NOJ-1R-W6e"/>
                                     <outlet property="subtitleLabel" destination="Qq0-dd-etx" id="xdt-PQ-F2f"/>
                                     <outlet property="titleLabel" destination="BsB-ud-ZNP" id="FXg-zQ-QR6"/>
                                     <segue destination="osP-Nc-iui" kind="show" identifier="showDetail" id="W3a-X0-AyT"/>

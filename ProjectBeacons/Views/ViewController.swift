@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -21,7 +22,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.navigationBar.topItem?.title = "Switch account"
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,13 +38,56 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    // MARK: Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationNavigationController = segue.destination as! UINavigationController
-        if let targetController = destinationNavigationController.topViewController as? LocationsTableViewController {
-            targetController.username = nameField.text ?? ""
+    @IBAction func onEnter(_ sender: UIButton) {
+        if let personName = nameField.text, personName.count > 0 {
+            var person : Person? = nil
+            
+            do {
+                person = try Person.getOrCreatePersonWith(name: personName, context: context)
+            } catch {
+                print("Error creating person: \(error)")
+            }
+            
+            guard let defaultImage = UIImage(named: "userImage") else {
+                fatalError("Could not find userImage to set default image")
+            }
+            
+            if let uniquePerson = person {
+                uniquePerson.name = personName
+                
+                // Update profile picture if image changed
+                if let img = imagePreview.image, img != UIImage(named: "SelectPhoto") {
+                    print("Setting new photo!")
+                    uniquePerson.profilePhoto = UIImagePNGRepresentation(imagePreview.image ?? defaultImage)! as NSData
+                }
+                
+                self.resetFields()
+                
+                self.navigateToLocations(person: uniquePerson)
+            }
+            
+        } else {
+            let alert = UIAlertController(title: "Name required", message: "You need to enter your name", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
         }
+    }
+    
+    func resetFields() {
+        guard let selectPhoto = UIImage(named: "SelectPhoto") else {
+            fatalError("could not find select photo in image assets!")
+        }
+        nameField.text = ""
+        imagePreview.image = selectPhoto
+    }
+    
+    // MARK: Navigation
+
+    func navigateToLocations(person: Person) {
+        let locationsVC = self.storyboard!.instantiateViewController(withIdentifier: "LocationsTableViewController") as! LocationsTableViewController
+        locationsVC.username = person.name
+        let navController = UINavigationController(rootViewController: locationsVC)
+        self.present(navController, animated: true)
     }
     
     // MARK: UIImagePickerControllerDelegate

@@ -127,6 +127,6 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
         // Configure Cell
         cell.titleLabel?.text = person?.name
         cell.subtitleLabel?.text = "Subtitle"
-        cell.imageView?.image = UIImage(data: (person?.profilePhoto)!)
+        cell.imageView?.image = UIImage(data: (person?.profilePhoto)! as Data)
     }
 }

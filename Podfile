@@ -9,5 +9,6 @@ target 'ProjectBeacons' do
 
 pod 'Firebase/Core'
 pod 'Firebase/Database'
+pod 'SVProgressHUD'
 
 end
