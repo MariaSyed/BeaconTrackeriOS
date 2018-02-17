@@ -23,6 +23,8 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.topItem?.title = "Back"
+
         tableView.rowHeight = 80
         tableView.dataSource = self
         
@@ -39,20 +41,11 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
         super.didReceiveMemoryWarning()
     }
     
+    // MARK: IBActions
     
     @IBAction func onSwitchAccount(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     // MARK: - NSFetchedResultsControllerDelegate methods
     
@@ -115,7 +108,7 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
         
         let person: Person?
         
-        switch indexPath[0] {
+        switch indexPath.section {
         case 0:
             person = self.firstSection.fetchedObjects![indexPath.row]
         case 1:
@@ -123,10 +116,58 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
         default:
             person = self.firstSection.fetchedObjects![indexPath.row]
         }
-
-        // Configure Cell
+        
+        // Configure cell
+        
+        // Set subtitle with most recent location name and minutes elapsed
+        if let beaconEventsSet = person?.beaconEvents {
+            // convert set to array
+            let beaconEventsArray: [BeaconEvent] = Array(beaconEventsSet) as! [BeaconEvent]
+            if (beaconEventsArray.count > 0) {
+                
+                let mostRecentBeaconEvent : BeaconEvent = beaconEventsArray.reduce(beaconEventsArray[0], { $0.timestamp!.timeIntervalSince1970 > $1.timestamp!.timeIntervalSince1970 ? $0 : $1 } )
+                
+                
+                if let locationName = mostRecentBeaconEvent.locationName {
+                    cell.subtitleLabel?.text = locationName
+                }
+                
+                if let timestamp = mostRecentBeaconEvent.timestamp {
+                    let secondsPassed = timestamp.timeIntervalSinceNow
+                    
+                    let minutesPassed = Int(abs(secondsPassed) / 60)
+                    
+                    cell.subtitleLabel?.text?.append(", \(minutesPassed) min ago")
+                    
+                }
+            }
+        }
+        
         cell.titleLabel?.text = person?.name
-        cell.subtitleLabel?.text = "Subtitle"
-        cell.imageView?.image = UIImage(data: (person?.profilePhoto)! as Data)
+        cell.profileImage.image = UIImage(data: (person?.profilePhoto)! as Data)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let person: Person?
+        
+        switch indexPath.section {
+        case 0:
+            person = self.firstSection.fetchedObjects![indexPath.row]
+        case 1:
+            person = self.secondSection.fetchedObjects![indexPath.row]
+        default:
+            person = self.firstSection.fetchedObjects![indexPath.row]
+        }
+        
+        let historyVC = self.storyboard!.instantiateViewController(withIdentifier: "LocationHistoryTableViewController") as! LocationHistoryTableViewController
+        
+        if let person = person, let beaconEventsSet = person.beaconEvents  {
+            let beaconEventsArray = Array(beaconEventsSet) as! [BeaconEvent]
+            print("beacon events: \(beaconEventsArray)")
+            historyVC.beaconEvents = beaconEventsArray
+            let navController = UINavigationController(rootViewController: historyVC)
+            self.present(navController, animated: true)
+        }
+        
     }
 }

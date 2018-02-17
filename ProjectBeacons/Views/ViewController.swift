@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -48,30 +47,38 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 print("Error creating person: \(error)")
             }
             
-            guard let defaultImage = UIImage(named: "userImage") else {
-                fatalError("Could not find userImage to set default image")
-            }
-            
             if let uniquePerson = person {
+//                let beaconEvent: BeaconEvent = BeaconEvent(context: context)
+//                beaconEvent.locationID = "0-1"
+//                beaconEvent.locationName = "Metropolia B110"
+//                beaconEvent.major = "0"
+//                beaconEvent.minor = "1"
+//                beaconEvent.timestamp = Date()
+//                beaconEvent.triggerEvent = "ENTER"
                 uniquePerson.name = personName
-                
+//                uniquePerson.addToBeaconEvents(beaconEvent)
                 // Update profile picture if image changed
                 if let img = imagePreview.image, img != UIImage(named: "SelectPhoto") {
-                    print("Setting new photo!")
-                    uniquePerson.profilePhoto = UIImagePNGRepresentation(imagePreview.image ?? defaultImage)! as NSData
+                    // Set new photo
+                    if let image = imagePreview.image {
+                        uniquePerson.profilePhoto = UIImagePNGRepresentation(image)! as NSData
+                    }
                 }
-                
+                try? context.save()
                 self.resetFields()
                 
                 self.navigateToLocations(person: uniquePerson)
             }
             
         } else {
+            // No name entered
             let alert = UIAlertController(title: "Name required", message: "You need to enter your name", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
     }
+    
+    // MARK: Private functions
     
     func resetFields() {
         guard let selectPhoto = UIImage(named: "SelectPhoto") else {
@@ -81,8 +88,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePreview.image = selectPhoto
     }
     
-    // MARK: Navigation
-
     func navigateToLocations(person: Person) {
         let locationsVC = self.storyboard!.instantiateViewController(withIdentifier: "LocationsTableViewController") as! LocationsTableViewController
         locationsVC.username = person.name
