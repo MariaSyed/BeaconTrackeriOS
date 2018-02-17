@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ProjectBeacons/Classes/FirebaseObservable.swift"
+            timestampString = "539982589.395963"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "8"
+            endingLineNumber = "8"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectBeacons.FirebaseObservable.deinit"
+                  moduleName = "ProjectBeacons"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mariasyed/Documents/metropolia/Native%20iOS%20and%20Android/Project/ProjectBeacons/ProjectBeacons/Classes/FirebaseObservable.swift"
+                  timestampString = "540557334.219246"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectBeacons.FirebaseObservable.__deallocating_deinit"
+                  moduleName = "ProjectBeacons"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mariasyed/Documents/metropolia/Native%20iOS%20and%20Android/Project/ProjectBeacons/ProjectBeacons/Classes/FirebaseObservable.swift"
+                  timestampString = "540557334.223209"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectBeacons.FirebaseObservable.__allocating_init() -&gt; ProjectBeacons.FirebaseObservable"
+                  moduleName = "ProjectBeacons"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mariasyed/Documents/metropolia/Native%20iOS%20and%20Android/Project/ProjectBeacons/ProjectBeacons/Classes/FirebaseObservable.swift"
+                  timestampString = "540557334.227529"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "4">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProjectBeacons.FirebaseObservable.init() -&gt; ProjectBeacons.FirebaseObservable"
+                  moduleName = "ProjectBeacons"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mariasyed/Documents/metropolia/Native%20iOS%20and%20Android/Project/ProjectBeacons/ProjectBeacons/Classes/FirebaseObservable.swift"
+                  timestampString = "540557334.231076"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "11"
+                  endingLineNumber = "11"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
