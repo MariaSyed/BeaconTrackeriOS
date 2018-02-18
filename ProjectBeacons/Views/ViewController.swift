@@ -21,6 +21,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.navigationBar.topItem?.title = "Switch account"
+        
+        let firebase = FirebaseDatabaseObserver(context: context)
+        
+        firebase.observeAndSyncData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,27 +51,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 print("Error creating person: \(error)")
             }
             
-            if let uniquePerson = person {
-//                let beaconEvent: BeaconEvent = BeaconEvent(context: context)
-//                beaconEvent.locationID = "0-1"
-//                beaconEvent.locationName = "Metropolia B110"
-//                beaconEvent.major = "0"
-//                beaconEvent.minor = "1"
-//                beaconEvent.timestamp = Date()
-//                beaconEvent.triggerEvent = "ENTER"
-                uniquePerson.name = personName
-//                uniquePerson.addToBeaconEvents(beaconEvent)
+            if let userPerson = person {
+                userPerson.name = personName
+                
                 // Update profile picture if image changed
                 if let img = imagePreview.image, img != UIImage(named: "SelectPhoto") {
                     // Set new photo
-                    if let image = imagePreview.image {
-                        uniquePerson.profilePhoto = UIImagePNGRepresentation(image)! as NSData
-                    }
+                    print("Setting new photo \(img)")
+                    userPerson.profilePhoto = UIImagePNGRepresentation(img)! as NSData
+                } else {
+                    userPerson.profilePhoto = UIImagePNGRepresentation(UIImage(named: "userImage")!)! as NSData
                 }
                 try? context.save()
                 self.resetFields()
                 
-                self.navigateToLocations(person: uniquePerson)
+                print("person sent to locations table is  \(userPerson)")
+                self.navigateToLocations(person: userPerson)
             }
             
         } else {
@@ -78,7 +77,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    // MARK: Private functions
+    // MARK: Private Methods
     
     func resetFields() {
         guard let selectPhoto = UIImage(named: "SelectPhoto") else {
@@ -103,7 +102,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            fatalError("Espected a dictionary containiing value of type image instead got \(info)")
+            fatalError("Expected a dictionary containiing value of type image instead got \(info)")
         }
         
         // Preview selected image

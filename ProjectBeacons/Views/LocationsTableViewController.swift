@@ -144,7 +144,7 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
         }
         
         cell.titleLabel?.text = person?.name
-        cell.profileImage.image = UIImage(data: (person?.profilePhoto)! as Data)
+        cell.profileImage.image = UIImage(data: (person?.profilePhoto!)! as Data)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

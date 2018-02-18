@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D47" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="BeaconEvent" representedClassName="BeaconEvent" syncable="YES" codeGenerationType="class">
+    <entity name="BeaconEvent" representedClassName="BeaconEvent" syncable="YES">
         <attribute name="locationID" attributeType="String" syncable="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="major" optional="YES" attributeType="String" syncable="YES"/>

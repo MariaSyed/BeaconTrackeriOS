@@ -14,6 +14,9 @@
 		4D0EAFB8203878A0001D6C2E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0EAFB7203878A0001D6C2E /* Location.swift */; };
 		4D829320202F774B000E4C75 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82931F202F774B000E4C75 /* Observer.swift */; };
 		4D829322202F7757000E4C75 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D829321202F7757000E4C75 /* Observable.swift */; };
+		4DB14DC32038E89300DF8878 /* FirebaseDatabaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC22038E89300DF8878 /* FirebaseDatabaseObserver.swift */; };
+		4DB14DCA2038F13500DF8878 /* BeaconEvent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC82038F13500DF8878 /* BeaconEvent+CoreDataClass.swift */; };
+		4DB14DCB2038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC92038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift */; };
 		4DB8AEAF2028A85800D03118 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB8AEAE2028A85800D03118 /* AppDelegate.swift */; };
 		4DB8AEB12028A85800D03118 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB8AEB02028A85800D03118 /* ViewController.swift */; };
 		4DB8AEB42028A85800D03118 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DB8AEB22028A85800D03118 /* Main.storyboard */; };
@@ -35,6 +38,9 @@
 		4D0EAFB7203878A0001D6C2E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		4D82931F202F774B000E4C75 /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		4D829321202F7757000E4C75 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		4DB14DC22038E89300DF8878 /* FirebaseDatabaseObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseObserver.swift; sourceTree = "<group>"; };
+		4DB14DC82038F13500DF8878 /* BeaconEvent+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeaconEvent+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4DB14DC92038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeaconEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4DB8AEAB2028A85800D03118 /* ProjectBeacons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectBeacons.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB8AEAE2028A85800D03118 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4DB8AEB02028A85800D03118 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -65,9 +71,12 @@
 		4D829318202F75FD000E4C75 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4DB14DC82038F13500DF8878 /* BeaconEvent+CoreDataClass.swift */,
+				4DB14DC92038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift */,
 				4D0EAFAD20384E04001D6C2E /* Person+CoreDataClass.swift */,
 				4D0EAFAE20384E04001D6C2E /* Person+CoreDataProperties.swift */,
 				4D0EAFB7203878A0001D6C2E /* Location.swift */,
+				4DB14DC22038E89300DF8878 /* FirebaseDatabaseObserver.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -290,6 +299,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D0EAFAF20384E04001D6C2E /* Person+CoreDataClass.swift in Sources */,
+				4DB14DCB2038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift in Sources */,
+				4DB14DC32038E89300DF8878 /* FirebaseDatabaseObserver.swift in Sources */,
+				4DB14DCA2038F13500DF8878 /* BeaconEvent+CoreDataClass.swift in Sources */,
 				4DB8AEC42029107400D03118 /* LocationsTableViewCell.swift in Sources */,
 				4D0EAFB020384E04001D6C2E /* Person+CoreDataProperties.swift in Sources */,
 				4D829320202F774B000E4C75 /* Observer.swift in Sources */,

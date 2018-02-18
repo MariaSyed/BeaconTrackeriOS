@@ -17,23 +17,6 @@ class LocationHistoryTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let ev1 = BeaconEvent(context:context)
-//        ev1.locationID = "0-1"
-//        ev1.locationName = "Metro1"
-//        ev1.timestamp = Date(timeIntervalSinceNow: 100)
-//        
-//        let ev2 = BeaconEvent(context:context)
-//        ev2.locationID = "0-1"
-//        ev2.locationName = "Metro1"
-//        ev2.timestamp = Date(timeIntervalSinceNow: 60)
-//        
-//        let ev3 = BeaconEvent(context:context)
-//        ev3.locationID = "1-3"
-//        ev3.locationName = "Metro3"
-//        ev3.timestamp = Date(timeIntervalSinceNow: 20)
-//        
-//        beaconEvents = [ev1, ev2, ev3]
-        print("beacon events: \(beaconEvents)")
         if let events = beaconEvents {
             sections = getDictionaryOfSections(beaconEvents: events )
         }
@@ -135,51 +118,4 @@ class LocationHistoryTableViewController: UITableViewController {
             return "Past Locations"
         }
     }
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
