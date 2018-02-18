@@ -59,60 +59,56 @@ class FirebaseDatabaseObserver {
     }
     
     
-    // MARK: - Helper functions
+    // MARK: - Private Methods
     
-    func syncUserWithCoreData(userInfo: [String: AnyObject]) {
-        print("syncing beacon events with core data...")
-        let person: Person??
-        person = try? Person.getOrCreatePersonWith(name: userInfo["name"] as? String ?? "", context: self.context)
-        
-        if let p = person, let personUnwrapped = p {
-            print("Person is: \(personUnwrapped)")
-            personUnwrapped.name = userInfo["name"] as? String ?? ""
-            // TODO: Need to get actual image from Firebase Cloud
-            // Set new photo
-            if let image = UIImage(named: "userImage") {
-                personUnwrapped.profilePhoto = UIImagePNGRepresentation(image)! as NSData
-            }
-        }
-        
-        // beacon events from firebase
-        let beaconEvents = userInfo["beaconEvents"] as? [[String: String]] ?? []
-        
-        // save each new beacon event for user from Firebase into CoreData
-        for beaconEvent in beaconEvents {
-            let locationID = beaconEvent["locationID"]
-            var timestamp: Date?
-            
-            // convert timestamp in ISO Format to Date
-            if let isoStr = beaconEvent["timestamp"] {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-                timestamp = dateFormatter.date(from: isoStr)
-            }
-            
-            do {
-                if let p = person, let personUnwrapped = p {
-                    if let newBeaconEvent = try BeaconEvent.createUniqueBeaconEvent(withPerson: personUnwrapped, withLocationID: locationID, withTimestamp: timestamp, context: self.context) {
-                        
-                        // configure new beacon event with data from firebase
-                        newBeaconEvent.locationID = beaconEvent["locationID"] ?? ""
-                        newBeaconEvent.timestamp = timestamp as NSDate?
-                        newBeaconEvent.locationName = beaconEvent["locationName"] ?? ""
-                        newBeaconEvent.major = beaconEvent["major"] ?? ""
-                        newBeaconEvent.minor = beaconEvent["minor"] ?? ""
-                        newBeaconEvent.triggerEvent = beaconEvent["triggerEvent"] ?? ""
-                        
-                        print("CREATED NEW UNIQUE BEACON EVENT: \(newBeaconEvent)")
-
-                        // add new beacon event to existing person or new person
-                        personUnwrapped.addToBeaconEvents(newBeaconEvent)
+    private func syncUserWithCoreData(userInfo: [String: AnyObject]) {
+        do {
+            let person = try Person.getOrCreatePersonWith(name: userInfo["name"] as? String ?? "", context: self.context)
+            if let p = person {
+                p.name = userInfo["name"] as? String ?? ""
+                // TODO: Need to get actual image from Firebase Cloud
+                // Set new photo
+                if let image = UIImage(named: "userImage") {
+                    p.profilePhoto = UIImagePNGRepresentation(image)! as NSData
+                }
+                
+                // beacon events from firebase
+                let beaconEvents = userInfo["beaconEvents"] as? [[String: Any]] ?? []
+                
+                // save each new beacon event for user from Firebase into CoreData
+                for beaconEvent in beaconEvents {
+                    let locationID = beaconEvent["locationID"] as? String
+                    var timestamp: Date?
+                    
+                    if let isoStr = beaconEvent["timestamp"] as? String {
+                        timestamp = convertToDate(fromISO: isoStr)
+                    }
+                    if let p = person {
+                        if let newBeaconEvent = try BeaconEvent.createUniqueBeaconEvent(withPerson: p, withLocationID: locationID, withTimestamp: timestamp, context: self.context) {
+                            
+                            // configure new beacon event with data from firebase
+                            newBeaconEvent.locationID = beaconEvent["locationID"] as? String ?? ""
+                            newBeaconEvent.timestamp = timestamp as NSDate?
+                            newBeaconEvent.locationName = beaconEvent["locationName"] as? String
+                            newBeaconEvent.major = beaconEvent["major"] as? String
+                            newBeaconEvent.minor = beaconEvent["major"] as? String
+                            newBeaconEvent.triggerEvent = beaconEvent["triggerEvent"] as? String
+                            
+                            // add new beacon event to existing person or new person
+                            p.addToBeaconEvents(newBeaconEvent)
+                        }
                     }
                 }
-            } catch {
-                print("Error creating new beacon event or person: \(error)")
             }
+        } catch {
+            print("Error creating person or beacon event \(error)")
         }
+    }
+    
+    private func convertToDate(fromISO iso: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        return dateFormatter.date(from: iso)
     }
     
 }
