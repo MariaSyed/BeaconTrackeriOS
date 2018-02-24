@@ -8,12 +8,19 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
-class LocationsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class LocationsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, CLLocationManagerDelegate, Observer {
     typealias Controller = NSFetchedResultsController<Person>
 
     var username: String?
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let beaconManager = BeaconManager(proximityUUID: UUID(uuidString: "9CFEC685-0722-228D-2189-CFAE06FBE1B5")!, identifier: "Olohuone")
+    
+    lazy var firebaseManager: FirebaseDatabaseManager = {
+        return FirebaseDatabaseManager(context: context)
+    }()
     
     private lazy var firstSection: Controller = self.fetchControllerFor(matchingName: true)
     private lazy var secondSection: Controller = self.fetchControllerFor(matchingName: false)
@@ -35,34 +42,40 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
             print("ERROR: Something went wrong fetching...")
         }
         
+        firebaseManager.observeAndSyncData()
+        beaconManager.locationManager.delegate = self
+        
+        beaconManager.startMonitoring()
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: IBActions
+    // MARK: - IBActions
     
     @IBAction func onSwitchAccount(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    // MARK: - NSFetchedResultsControllerDelegate methods
+    // MARK: - Observer Methods
+    
+    func performAction() {
+        tableView.reloadData()
+    }
+    
+    // MARK: - NSFetchedResultsControllerDelegate Methods
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
-        tableView.reloadData()
-    }
-    
     private func fetchControllerFor(matchingName matching: Bool) -> Controller {
         let request: NSFetchRequest<Person> = NSFetchRequest<Person>(entityName: "Person")
                 let predicate: NSPredicate = matching ?
-                    NSPredicate(format: "\(#keyPath(Person.name)) == %@", self.username ?? "") :
-                    NSPredicate(format: "\(#keyPath(Person.name)) != %@", self.username ?? "")
+                    NSPredicate(format: "\(#keyPath(Person.name)) ==[cd] %@", self.username ?? "") :
+                    NSPredicate(format: "\(#keyPath(Person.name)) !=[cd] %@", self.username ?? "")
                 request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         let fetch = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.context, sectionNameKeyPath: nil, cacheName: nil)
@@ -163,11 +176,74 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
         
         if let person = person, let beaconEventsSet = person.beaconEvents  {
             let beaconEventsArray = Array(beaconEventsSet) as! [BeaconEvent]
-            print("beacon events: \(beaconEventsArray)")
             historyVC.beaconEvents = beaconEventsArray
             let navController = UINavigationController(rootViewController: historyVC)
             self.present(navController, animated: true)
         }
         
     }
+    
+    // MARK: - CLLocationManagerDelegate Methods
+    
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        print("started monitoring for \(region)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
+        print("Failed monitoring region: \(error.localizedDescription)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager failed: \(error.localizedDescription)")
+    }
+    
+    // TODO: Remove this ranging func later, placed here for testing
+    
+    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
+        print("\(username ?? "Unknown User") did range \(beacons)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        let beaconEvent: BeaconEvent = createBeaconEvent(withRegion: region as! CLBeaconRegion, triggerEvent: "enter")
+        firebaseManager.saveBeaconEvent(beaconEvent: beaconEvent, forName: username ?? "Unknown")
+        print("\(username ?? "Unknown User") just entered region \(region)")
+    }
+   
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        let beaconEvent: BeaconEvent = createBeaconEvent(withRegion: region as! CLBeaconRegion, triggerEvent: "exit")
+        firebaseManager.saveBeaconEvent(beaconEvent: beaconEvent, forName: username ?? "Unknown")
+        print("\(username ?? "Unknown User") just exitted region \(region)")
+    }
+    
+    // MARK: - Private Methods
+    
+    func createBeaconEvent(withRegion region: CLBeaconRegion, triggerEvent: String) -> BeaconEvent {
+        // Get major, minor, uuid from region
+        let uuid = region.proximityUUID
+        let major = region.major ?? 0
+        let minor = region.minor ?? 0
+
+        // Create locationID from major minor values
+        let locationID = "\(major)-\(minor)"
+        let locationName = firebaseManager.getLocationName(fromLocationID: locationID)
+        
+        // Get timestamp from Date(), username, trigger = triggerEvent
+        let timestamp = Date()
+        let triggerEvent = "exit"
+        
+        // Create & return BeaconEvent from the above data
+        let beaconEvent = BeaconEvent(context: context)
+        
+        beaconEvent.uuid = uuid
+        beaconEvent.locationID = locationID
+        beaconEvent.locationName = locationName
+        beaconEvent.major = "\(major)"
+        beaconEvent.minor = "\(minor)"
+        beaconEvent.timestamp = timestamp as NSDate
+        beaconEvent.triggerEvent = triggerEvent
+        
+        return beaconEvent
+    }
+
 }

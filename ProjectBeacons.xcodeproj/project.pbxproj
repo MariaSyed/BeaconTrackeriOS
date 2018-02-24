@@ -14,9 +14,10 @@
 		4D0EAFB8203878A0001D6C2E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0EAFB7203878A0001D6C2E /* Location.swift */; };
 		4D829320202F774B000E4C75 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D82931F202F774B000E4C75 /* Observer.swift */; };
 		4D829322202F7757000E4C75 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D829321202F7757000E4C75 /* Observable.swift */; };
-		4DB14DC32038E89300DF8878 /* FirebaseDatabaseObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC22038E89300DF8878 /* FirebaseDatabaseObserver.swift */; };
+		4DB14DC32038E89300DF8878 /* FirebaseDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC22038E89300DF8878 /* FirebaseDatabaseManager.swift */; };
 		4DB14DCA2038F13500DF8878 /* BeaconEvent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC82038F13500DF8878 /* BeaconEvent+CoreDataClass.swift */; };
 		4DB14DCB2038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DC92038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift */; };
+		4DB14DD72039787C00DF8878 /* BeaconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB14DD62039787C00DF8878 /* BeaconManager.swift */; };
 		4DB8AEAF2028A85800D03118 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB8AEAE2028A85800D03118 /* AppDelegate.swift */; };
 		4DB8AEB12028A85800D03118 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB8AEB02028A85800D03118 /* ViewController.swift */; };
 		4DB8AEB42028A85800D03118 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DB8AEB22028A85800D03118 /* Main.storyboard */; };
@@ -38,9 +39,10 @@
 		4D0EAFB7203878A0001D6C2E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		4D82931F202F774B000E4C75 /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		4D829321202F7757000E4C75 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
-		4DB14DC22038E89300DF8878 /* FirebaseDatabaseObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseObserver.swift; sourceTree = "<group>"; };
+		4DB14DC22038E89300DF8878 /* FirebaseDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseManager.swift; sourceTree = "<group>"; };
 		4DB14DC82038F13500DF8878 /* BeaconEvent+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeaconEvent+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4DB14DC92038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeaconEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4DB14DD62039787C00DF8878 /* BeaconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconManager.swift; sourceTree = "<group>"; };
 		4DB8AEAB2028A85800D03118 /* ProjectBeacons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectBeacons.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DB8AEAE2028A85800D03118 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4DB8AEB02028A85800D03118 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,7 +78,6 @@
 				4D0EAFAD20384E04001D6C2E /* Person+CoreDataClass.swift */,
 				4D0EAFAE20384E04001D6C2E /* Person+CoreDataProperties.swift */,
 				4D0EAFB7203878A0001D6C2E /* Location.swift */,
-				4DB14DC22038E89300DF8878 /* FirebaseDatabaseObserver.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -88,6 +89,49 @@
 				4D829321202F7757000E4C75 /* Observable.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		4DB14DD2203977A900DF8878 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				4DB8AEB22028A85800D03118 /* Main.storyboard */,
+				4DB8AEB72028A85800D03118 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		4DB14DD3203977B100DF8878 /* Application Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				4DB8AEAE2028A85800D03118 /* AppDelegate.swift */,
+			);
+			path = "Application Delegate";
+			sourceTree = "<group>";
+		};
+		4DB14DD4203977E800DF8878 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4DB8AEB52028A85800D03118 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4DB14DD52039780C00DF8878 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				4DB8AEC32029107400D03118 /* LocationsTableViewCell.swift */,
+				4D0EAFB520387525001D6C2E /* LocationHistoryTableViewCell.swift */,
+			);
+			path = TableViewCells;
+			sourceTree = "<group>";
+		};
+		4DB14DF6203B6BA500DF8878 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				4DB14DC22038E89300DF8878 /* FirebaseDatabaseManager.swift */,
+				4DB14DD62039787C00DF8878 /* BeaconManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		4DB8AEA22028A85800D03118 = {
@@ -111,38 +155,37 @@
 		4DB8AEAD2028A85800D03118 /* ProjectBeacons */ = {
 			isa = PBXGroup;
 			children = (
+				4DB14DF6203B6BA500DF8878 /* Managers */,
+				4DB14DD3203977B100DF8878 /* Application Delegate */,
 				4D829319202F7609000E4C75 /* Protocols */,
 				4D829318202F75FD000E4C75 /* Classes */,
-				4DD999A9202E2E0400E56D82 /* Models */,
-				4DB8AEC22029103900D03118 /* Views */,
-				4DB8AEAE2028A85800D03118 /* AppDelegate.swift */,
-				4DB8AEB22028A85800D03118 /* Main.storyboard */,
-				4DB8AEB52028A85800D03118 /* Assets.xcassets */,
-				4DB8AEB72028A85800D03118 /* LaunchScreen.storyboard */,
-				4DB8AEBA2028A85800D03118 /* Info.plist */,
+				4DB8AEC22029103900D03118 /* View Controllers */,
+				4DB14DD52039780C00DF8878 /* TableViewCells */,
+				4DD999A9202E2E0400E56D82 /* Core Data */,
+				4DB14DD2203977A900DF8878 /* Storyboards */,
+				4DB14DD4203977E800DF8878 /* Resources */,
 				4DD999B5202F600A00E56D82 /* GoogleService-Info.plist */,
+				4DB8AEBA2028A85800D03118 /* Info.plist */,
 			);
 			path = ProjectBeacons;
 			sourceTree = "<group>";
 		};
-		4DB8AEC22029103900D03118 /* Views */ = {
+		4DB8AEC22029103900D03118 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				4DB8AEC02029102600D03118 /* LocationsTableViewController.swift */,
 				4DB8AEB02028A85800D03118 /* ViewController.swift */,
-				4DB8AEC32029107400D03118 /* LocationsTableViewCell.swift */,
 				4D0EAFB1203873D8001D6C2E /* LocationHistoryTableViewController.swift */,
-				4D0EAFB520387525001D6C2E /* LocationHistoryTableViewCell.swift */,
 			);
-			path = Views;
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
-		4DD999A9202E2E0400E56D82 /* Models */ = {
+		4DD999A9202E2E0400E56D82 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
 				4DD999B0202EE5DE00E56D82 /* Model.xcdatamodeld */,
 			);
-			path = Models;
+			path = "Core Data";
 			sourceTree = "<group>";
 		};
 		D17BE277A5A4E45AA4B328A6 /* Pods */ = {
@@ -300,7 +343,7 @@
 			files = (
 				4D0EAFAF20384E04001D6C2E /* Person+CoreDataClass.swift in Sources */,
 				4DB14DCB2038F13500DF8878 /* BeaconEvent+CoreDataProperties.swift in Sources */,
-				4DB14DC32038E89300DF8878 /* FirebaseDatabaseObserver.swift in Sources */,
+				4DB14DC32038E89300DF8878 /* FirebaseDatabaseManager.swift in Sources */,
 				4DB14DCA2038F13500DF8878 /* BeaconEvent+CoreDataClass.swift in Sources */,
 				4DB8AEC42029107400D03118 /* LocationsTableViewCell.swift in Sources */,
 				4D0EAFB020384E04001D6C2E /* Person+CoreDataProperties.swift in Sources */,
@@ -313,6 +356,7 @@
 				4DB8AEAF2028A85800D03118 /* AppDelegate.swift in Sources */,
 				4D0EAFB8203878A0001D6C2E /* Location.swift in Sources */,
 				4DB8AEC12029102600D03118 /* LocationsTableViewController.swift in Sources */,
+				4DB14DD72039787C00DF8878 /* BeaconManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,12 +495,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XHPV7W35AM;
 				INFOPLIST_FILE = ProjectBeacons/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mariasyed.ProjectBeacons;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -466,12 +511,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XHPV7W35AM;
 				INFOPLIST_FILE = ProjectBeacons/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mariasyed.ProjectBeacons;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

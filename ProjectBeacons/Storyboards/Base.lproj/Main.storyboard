@@ -23,11 +23,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BackgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="tgH-oL-N5m">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="BackgroundImage" translatesAutoresizingMaskIntoConstraints="NO" id="tgH-oL-N5m">
+                                <rect key="frame" x="0.0" y="-76" width="320" height="644"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="iDG-7d-OV6">
-                                <rect key="frame" x="20" y="69" width="280" height="430"/>
+                                <rect key="frame" x="20" y="64" width="280" height="440"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Mtv-3z-1dE">
                                         <rect key="frame" x="58.5" y="0.0" width="163.5" height="120"/>
@@ -52,17 +52,16 @@
                                         </constraints>
                                     </stackView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter your name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rb7-h1-Zzk">
-                                        <rect key="frame" x="0.0" y="140" width="280" height="30"/>
+                                        <rect key="frame" x="0.0" y="140" width="280" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="ddG-99-bnN"/>
-                                            <constraint firstAttribute="height" constant="30" id="zo1-mn-x9X"/>
+                                            <constraint firstAttribute="height" constant="40" id="Nfr-43-IgX"/>
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2n-mF-1UP">
-                                        <rect key="frame" x="0.0" y="190" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="200" width="280" height="40"/>
                                         <color key="backgroundColor" red="0.47684186699999997" green="0.50480759139999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="7Cr-1q-JR1"/>
@@ -75,7 +74,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fhp-UW-Mvn">
-                                        <rect key="frame" x="0.0" y="250" width="280" height="40"/>
+                                        <rect key="frame" x="0.0" y="260" width="280" height="40"/>
                                         <color key="backgroundColor" red="0.46275190683874518" green="0.37596670763334977" blue="0.97043173779085812" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="2AC-PM-dZa"/>
@@ -93,7 +92,7 @@
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="eBQ-pP-BrI">
-                                        <rect key="frame" x="80" y="310" width="120" height="120"/>
+                                        <rect key="frame" x="80" y="320" width="120" height="120"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="HEj-4G-xYa"/>
                                             <constraint firstAttribute="height" constant="120" id="KuE-fa-b7u"/>
@@ -134,7 +133,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="936.79999999999995" y="132.68365817091455"/>
+            <point key="canvasLocation" x="935.625" y="132.04225352112675"/>
         </scene>
         <!--Locations-->
         <scene sceneID="9L3-ik-rhg">

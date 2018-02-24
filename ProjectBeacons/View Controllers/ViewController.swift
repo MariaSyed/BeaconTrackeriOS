@@ -7,14 +7,23 @@
 //
 
 import UIKit
+import CoreLocation
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
+    
+    lazy var firebaseManager: FirebaseDatabaseManager = {
+        return FirebaseDatabaseManager(context: context)
+    }()
+    
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var imageSelector: UIButton!
     @IBOutlet weak var imagePreview: UIImageView!
+    
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +31,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.navigationBar.topItem?.title = "Switch account"
         
-        let firebase = FirebaseDatabaseObserver(context: context)
-        
-        firebase.observeAndSyncData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,32 +49,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func onEnter(_ sender: UIButton) {
         if let personName = nameField.text, personName.count > 0 {
-            var person : Person? = nil
+            // Save to rtdb
+            firebaseManager.savePerson(withName: personName)
             
-            do {
-                person = try Person.getOrCreatePersonWith(name: personName, context: context)
-            } catch {
-                print("Error creating person: \(error)")
-            }
-            
-            if let userPerson = person {
-                userPerson.name = personName
-                
-                // Update profile picture if image changed
-                if let img = imagePreview.image, img != UIImage(named: "SelectPhoto") {
-                    // Set new photo
-                    print("Setting new photo \(img)")
-                    userPerson.profilePhoto = UIImagePNGRepresentation(img)! as NSData
-                } else {
-                    userPerson.profilePhoto = UIImagePNGRepresentation(UIImage(named: "userImage")!)! as NSData
-                }
-                try? context.save()
-                self.resetFields()
-                
-                print("person sent to locations table is  \(userPerson)")
-                self.navigateToLocations(person: userPerson)
-            }
-            
+            self.resetFields()
+            self.navigateToLocations(name: personName)
         } else {
             // No name entered
             let alert = UIAlertController(title: "Name required", message: "You need to enter your name", preferredStyle: .alert)
@@ -87,9 +72,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePreview.image = selectPhoto
     }
     
-    func navigateToLocations(person: Person) {
+    func navigateToLocations(name: String) {
         let locationsVC = self.storyboard!.instantiateViewController(withIdentifier: "LocationsTableViewController") as! LocationsTableViewController
-        locationsVC.username = person.name
+        locationsVC.username = name
         let navController = UINavigationController(rootViewController: locationsVC)
         self.present(navController, animated: true)
     }
@@ -102,7 +87,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            fatalError("Expected a dictionary containiing value of type image instead got \(info)")
+            fatalError("Expected a dictionary containing value of type image instead got \(info)")
         }
         
         // Preview selected image
@@ -110,7 +95,5 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         dismiss(animated: true, completion: nil)
     }
-
-
 }
 

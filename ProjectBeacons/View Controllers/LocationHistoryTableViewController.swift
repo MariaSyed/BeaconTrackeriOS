@@ -26,7 +26,7 @@ class LocationHistoryTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: - Private functions
+    // MARK: - Private Methods
     
     @IBAction func onBackPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -69,7 +69,7 @@ class LocationHistoryTableViewController: UITableViewController {
         }
     }
 
-    // MARK: - Table view data source
+    // MARK: - TableViewDataSource Methods
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count

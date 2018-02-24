@@ -7,5 +7,5 @@
 //
 
 protocol Observer {
-    func performAction(_ : Any)
+    func performAction()
 }

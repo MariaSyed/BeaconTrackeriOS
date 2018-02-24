@@ -9,9 +9,28 @@
 import Firebase
 import CoreData
 
-class FirebaseDatabaseObserver {
+class FirebaseDatabaseManager: Observable {
+    func registerObserver(observer: Observer) {
+        if firebaseObservers.index(where: {($0 as AnyObject) === (observer as AnyObject)}) == nil {
+            firebaseObservers.append(observer)
+        }
+    }
+    
+    func deregisterObserver(observer: Observer) {
+        if let index = firebaseObservers.index(where: {($0 as AnyObject) === (observer as AnyObject)}) {
+            firebaseObservers.remove(at: index)
+        }
+    }
+    
+    func notifyObservers() {
+        for observer in firebaseObservers {
+            observer.performAction()
+        }
+    }
+    
     var ref: DatabaseReference!
     var context: NSManagedObjectContext!
+    var firebaseObservers: [Observer] = []
     
     init(context: NSManagedObjectContext) {
         self.ref = Database.database().reference()
@@ -23,14 +42,21 @@ class FirebaseDatabaseObserver {
     public func observeAndSyncData() {
         // start observing data
         _ = ref.child("users").observe(DataEventType.value, with: { (snapshot) in
-            print("triggered firebase observer! Have snapshot now...")
             let userDict = snapshot.value as? [String : [String: AnyObject]] ?? [:]
             
+            self.syncCoreData(withUsers: Array(userDict.keys))
+            
             for (_, info) in userDict {
-                self.syncUserWithCoreData(userInfo: info)
+                if info.isEmpty == false {
+                    self.syncUserWithCoreData(userInfo: info)
+                    
+                } else {
+                    print("WARNING: no info found")
+                }
             }
             
             do {
+                self.notifyObservers()
                 try self.context.save()
             } catch {
                 print("Error saving context: \(error)")
@@ -49,18 +75,33 @@ class FirebaseDatabaseObserver {
             "minor": beaconEvent.minor ?? "",
             "uuid": beaconEvent.uuid ?? ""
         ]
+        savePerson(withName: name)
         let newBeaconEventRef = self.ref.child("users/" + name.lowercased() + "/beaconEvents").childByAutoId()
         newBeaconEventRef.setValue(newBeaconEvent)
     }
     
     public func savePerson(withName name: String) {
         // TODO: upload image to Firebase Cloud Storage too
-        self.ref.child("users/" + name.lowercased() + "/name").setValue(name)
+        self.ref.child("users/").observeSingleEvent(of: .value, with: { (snapshot) -> Void in
+            if snapshot.hasChild(name.lowercased()) == false {
+                self.ref.child("users/" + name.lowercased() + "/name").setValue(name)
+            }
+        })
     }
     
+    public func getLocationName(fromLocationID locationID: String) -> String {
+        switch (locationID) {
+        case "0-1":
+            return "Metropolia B301"
+        case "0-5":
+            return "Metropolia B11"
+        default:
+            return "Metropolia lobby"
+        }
+    }
     
     // MARK: - Private Methods
-    
+   
     private func syncUserWithCoreData(userInfo: [String: AnyObject]) {
         do {
             let person = try Person.getOrCreatePersonWith(name: userInfo["name"] as? String ?? "", context: self.context)
@@ -109,6 +150,20 @@ class FirebaseDatabaseObserver {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return dateFormatter.date(from: iso)
+    }
+    
+    private func syncCoreData(withUsers users: Array<String>) {
+        // Remove old data from core data
+
+        let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+        let personsInCoreData = try! context.fetch(fetchRequest)
+        
+        for person in personsInCoreData {
+            let i = users.index(where: {$0 == (person.name ?? "Unknown")})
+            if i == nil {
+                context.delete(person)
+            }
+        }
     }
     
 }
