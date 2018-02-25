@@ -8,9 +8,11 @@
 
 import UIKit
 import CoreLocation
+import FBSDKLoginKit
+import FirebaseAuth
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     lazy var firebaseManager: FirebaseDatabaseManager = {
@@ -48,18 +50,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func onEnter(_ sender: UIButton) {
-        if let personName = nameField.text, personName.count > 0 {
-            // Save to rtdb
-            firebaseManager.savePerson(withName: personName)
-            
-            self.resetFields()
-            self.navigateToLocations(name: personName)
-        } else {
-            // No name entered
-            let alert = UIAlertController(title: "Name required", message: "You need to enter your name", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            present(alert, animated: true, completion: nil)
+        
+        signIn {
+            self.navigateToLocations()
         }
+        
+//        if let personName = nameField.text, personName.count > 0 {
+//            // Save to rtdb
+//            firebaseManager.savePerson(withName: personName)
+//
+//            self.resetFields()
+//            self.navigateToLocations(name: personName)
+//        } else {
+//            // No name entered
+//            let alert = UIAlertController(title: "Name required", message: "You need to enter your name", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+//            present(alert, animated: true, completion: nil)
+//        }
     }
     
     // MARK: Private Methods
@@ -72,11 +79,44 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePreview.image = selectPhoto
     }
     
-    func navigateToLocations(name: String) {
+    func navigateToLocations() {
         let locationsVC = self.storyboard!.instantiateViewController(withIdentifier: "LocationsTableViewController") as! LocationsTableViewController
         locationsVC.username = name
         let navController = UINavigationController(rootViewController: locationsVC)
         self.present(navController, animated: true)
+    }
+    
+    func signIn(onSignIn: @escaping () -> Void) {
+        let loginManager = FBSDKLoginManager()
+        loginManager.logIn(withReadPermissions: [ "public_profile", "email" ], from: self) { loginResult, error in
+            if let error = error {
+                print("FB Login error \(error)")
+            } else if (loginResult?.isCancelled)! {
+                print("Cancelled")
+            } else {
+                print("Logged in!")
+                let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+                Auth.auth().signIn(with: credential) { (user, error) in
+                    if let error = error {
+                        print("Error with signing in \(error)")
+                        return
+                    }
+                    // User is signed in
+                    print("User signed in! with Access Token: \(String(describing: user?.displayName))")
+                    
+                    onSignIn()
+                }
+            }
+        }
+    }
+    
+    func signOut() {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
     }
     
     // MARK: UIImagePickerControllerDelegate
@@ -96,4 +136,5 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         dismiss(animated: true, completion: nil)
     }
 }
+
 

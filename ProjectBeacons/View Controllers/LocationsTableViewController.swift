@@ -62,6 +62,7 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
     // MARK: - Observer Methods
     
     func performAction() {
+        // When data synchronization is complete, reload the table data
         tableView.reloadData()
     }
     

@@ -10,5 +10,8 @@ target 'ProjectBeacons' do
 pod 'Firebase/Core'
 pod 'Firebase/Database'
 pod 'SVProgressHUD'
+pod 'FacebookLogin'
+pod 'FBSDKLoginKit'
+pod 'Firebase/Auth'
 
 end
