@@ -5,6 +5,9 @@
 //  Created by Maria Syed on 18/02/2018.
 //  Copyright © 2018 Maria Syed. All rights reserved.
 //
+// Description:
+// Beacon Manger class starts and stops beacon monitoring
+// and keeps track of the region being monitored for
 
 import CoreLocation
 

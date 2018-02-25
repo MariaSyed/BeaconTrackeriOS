@@ -12,7 +12,7 @@ import CoreLocation
 
 class LocationsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, CLLocationManagerDelegate, Observer {
     typealias Controller = NSFetchedResultsController<Person>
-
+    
     var username: String?
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -62,6 +62,7 @@ class LocationsTableViewController: UITableViewController, NSFetchedResultsContr
     // MARK: - Observer Methods
     
     func performAction() {
+        // When data synchronization is complete, reload the table data
         tableView.reloadData()
     }
     

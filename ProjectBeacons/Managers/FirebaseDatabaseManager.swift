@@ -5,6 +5,10 @@
 //  Created by Maria Syed on 18/02/2018.
 //  Copyright © 2018 Maria Syed. All rights reserved.
 //
+// Description:
+// Firebase Database Manager implements observable protocol, it observes changes to particular nodes in firebase
+// real time database (RTDB) and notifies observers of the changes
+// and saves data into firebase RTDB
 
 import Firebase
 import CoreData
@@ -56,6 +60,7 @@ class FirebaseDatabaseManager: Observable {
             }
             
             do {
+                // Let observers know that synchronization is complete
                 self.notifyObservers()
                 try self.context.save()
             } catch {
@@ -90,14 +95,31 @@ class FirebaseDatabaseManager: Observable {
     }
     
     public func getLocationName(fromLocationID locationID: String) -> String {
+        
         switch (locationID) {
         case "0-1":
-            return "Metropolia B301"
-        case "0-5":
-            return "Metropolia B11"
+            return "Metropolia B112"
+        case "0-2":
+            return "Metropolia B102"
+        case "1-1":
+            return "Metropolia A11"
         default:
-            return "Metropolia lobby"
+            return "Unknown Location"
         }
+//        var locationDict: [String:  String]?
+//
+//        _ = ref.child("users").observeSingleEvent(of: .value, with: { (snapshot) in
+//            locationDict = snapshot.value as? [String : String] ?? [:]
+//        })
+//        if let map = locationDict {
+//            if let locationName = map[locationID] {
+//                return locationName
+//            } else {
+//                return "Unknown Location"
+//            }
+//        } else {
+//            return "Unknown Location"
+//        }
     }
     
     // MARK: - Private Methods
