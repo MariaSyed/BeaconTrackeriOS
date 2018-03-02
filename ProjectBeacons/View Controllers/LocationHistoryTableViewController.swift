@@ -63,7 +63,7 @@ class LocationHistoryTableViewController: UITableViewController {
             let mostRecentBeaconEvent = filteredEventsByID.reduce(filteredEventsByID[0], { $0.timestamp!.timeIntervalSince1970 > $1.timestamp!.timeIntervalSince1970 ? $0 : $1 })
             
             let timeSinceLastVisit = Int((mostRecentBeaconEvent.timestamp?.timeIntervalSinceNow)! / 60)
-            return MostPopularLocation(locationName: mostRecentBeaconEvent.locationName ?? "", numberOfVisits: count, timeSinceLastVisit: timeSinceLastVisit)
+            return MostPopularLocation(locationID: mostRecentBeaconEvent.locationID ?? "", locationName: mostRecentBeaconEvent.locationName ?? "", numberOfVisits: count, timeSinceLastVisit: timeSinceLastVisit)
         } else {
             return nil
         }
@@ -115,12 +115,14 @@ class LocationHistoryTableViewController: UITableViewController {
             cell.titleLabel.text = object.locationName
             cell.timesVisitedLabel.text = "Visited \(object.numberOfVisits ?? 0) times"
             cell.lastVisitedLabel.text = "Last visited \(object.timeSinceLastVisit ?? 0) min ago"
+            cell.profileImage.image = UIImage(named: object.locationID ?? "0-1")
         case 1:
             if let section = sections[1] {
                 let object = section[indexPath.row] as! BeaconEvent
                 let minSinceLastVisit = Int((object.timestamp?.timeIntervalSinceNow)! / 60)
                 cell.titleLabel.text = "\(object.triggerEvent ?? "") \(object.locationName ?? "")"
                 cell.timesVisitedLabel.text = "Visited \(minSinceLastVisit) min ago"
+                cell.profileImage.image = UIImage(named: object.locationID ?? "0-1")
             }
         default:
             cell.titleLabel.text = "None"

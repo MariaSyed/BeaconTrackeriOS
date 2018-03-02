@@ -12,8 +12,10 @@ class MostPopularLocation {
     var locationName: String?
     var numberOfVisits: Int?
     var timeSinceLastVisit: Int?
+    var locationID: String?
     
-    init(locationName: String, numberOfVisits: Int, timeSinceLastVisit: Int) {
+    init(locationID: String, locationName: String, numberOfVisits: Int, timeSinceLastVisit: Int) {
+        self.locationID = locationID
         self.locationName = locationName
         self.numberOfVisits = numberOfVisits
         self.timeSinceLastVisit = timeSinceLastVisit

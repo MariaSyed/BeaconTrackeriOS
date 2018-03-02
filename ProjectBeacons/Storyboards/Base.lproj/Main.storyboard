@@ -242,7 +242,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A64-2u-P3f">
                                             <rect key="frame" x="8" y="8" width="304" height="73.5"/>
                                             <subviews>
-                                                <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="ptV-xt-udB">
+                                                <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="ptV-xt-udB">
                                                     <rect key="frame" x="0.0" y="0.0" width="73.5" height="73.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="73.5" id="UkL-wD-2HH"/>
