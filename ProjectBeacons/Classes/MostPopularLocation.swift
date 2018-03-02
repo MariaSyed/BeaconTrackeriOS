@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Location {
+class MostPopularLocation {
     var locationName: String?
     var numberOfVisits: Int?
     var timeSinceLastVisit: Int?

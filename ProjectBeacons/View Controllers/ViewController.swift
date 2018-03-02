@@ -5,9 +5,12 @@
 //  Created by Maria Syed on 05/02/2018.
 //  Copyright © 2018 Maria Syed. All rights reserved.
 //
+//  Login screen view controller, handles the login of the user and selects user image
 
 import UIKit
+import SVProgressHUD
 import CoreLocation
+import FirebaseStorage
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -20,6 +23,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var imageSelector: UIButton!
     @IBOutlet weak var imagePreview: UIImageView!
+    @IBOutlet weak var enterButton: UIButton!
     
     override var prefersStatusBarHidden: Bool{
         return true
@@ -31,6 +35,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.navigationBar.topItem?.title = "Switch account"
         
+        firebaseManager.observeAndSyncData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,13 +54,39 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func onEnter(_ sender: UIButton) {
         if let personName = nameField.text, personName.count > 0 {
-            // Save to rtdb
-            firebaseManager.savePerson(withName: personName)
+            enterButton.isEnabled = false
+            SVProgressHUD.show()
             
-            self.resetFields()
-            self.navigateToLocations(name: personName)
+            var imageData: Data?
+            
+            // Update profile picture if image changed
+            if let img = imagePreview.image, img != UIImage(named: "SelectPhoto") {
+                // Set new photo
+                imageData = UIImageJPEGRepresentation(img, 0.8) ?? Data()
+            }
+            
+        
+            DispatchQueue.global().async {
+                self.firebaseManager.savePerson(withName: personName, withImage: imageData, onCompletion: {
+                    DispatchQueue.main.async {
+                        SVProgressHUD.dismiss()
+                        self.enterButton.isEnabled = true
+                        self.resetFields()
+                        self.navigateToLocations(name: personName, newPhotoSet: imageData != nil)
+                    }
+                }, onFailure: {
+                    DispatchQueue.main.async {
+                        self.enterButton.isEnabled = true
+                        let alert = UIAlertController(title: "Error", message: "Something went wrong while uploading your image. Check internet connection and try again", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                })
+            }
+          
         } else {
             // No name entered
+            self.enterButton.isEnabled = true
             let alert = UIAlertController(title: "Name required", message: "You need to enter your name", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
@@ -72,9 +103,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePreview.image = selectPhoto
     }
     
-    func navigateToLocations(name: String) {
+    func navigateToLocations(name: String, newPhotoSet: Bool) {
         let locationsVC = self.storyboard!.instantiateViewController(withIdentifier: "LocationsTableViewController") as! LocationsTableViewController
         locationsVC.username = name
+        locationsVC.newPhotoSet = newPhotoSet
+        locationsVC.firebaseManager = self.firebaseManager
+        
         let navController = UINavigationController(rootViewController: locationsVC)
         self.present(navController, animated: true)
     }
@@ -95,5 +129,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         dismiss(animated: true, completion: nil)
     }
+    
 }
 

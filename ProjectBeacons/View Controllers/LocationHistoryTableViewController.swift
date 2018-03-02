@@ -35,7 +35,7 @@ class LocationHistoryTableViewController: UITableViewController {
     func getDictionaryOfSections (beaconEvents: [BeaconEvent]) -> [Int: [Any]] {
         var dictionaryOfSections = [Int: [Any]]()
 
-        let location: Location? = getMostRepeatedLocation(beaconEvents: beaconEvents)
+        let location: MostPopularLocation? = getMostRepeatedLocation(beaconEvents: beaconEvents)
         if let location = location {
             dictionaryOfSections[0] = [location]
         }
@@ -45,7 +45,7 @@ class LocationHistoryTableViewController: UITableViewController {
         return dictionaryOfSections
     }
     
-    func getMostRepeatedLocation(beaconEvents: [BeaconEvent]) -> Location? {
+    func getMostRepeatedLocation(beaconEvents: [BeaconEvent]) -> MostPopularLocation? {
         // Create dictionary to map value to count
         var counts = [String: Int]()
         
@@ -63,7 +63,7 @@ class LocationHistoryTableViewController: UITableViewController {
             let mostRecentBeaconEvent = filteredEventsByID.reduce(filteredEventsByID[0], { $0.timestamp!.timeIntervalSince1970 > $1.timestamp!.timeIntervalSince1970 ? $0 : $1 })
             
             let timeSinceLastVisit = Int((mostRecentBeaconEvent.timestamp?.timeIntervalSinceNow)! / 60)
-            return Location(locationName: mostRecentBeaconEvent.locationName ?? "", numberOfVisits: count, timeSinceLastVisit: timeSinceLastVisit)
+            return MostPopularLocation(locationName: mostRecentBeaconEvent.locationName ?? "", numberOfVisits: count, timeSinceLastVisit: timeSinceLastVisit)
         } else {
             return nil
         }
@@ -87,24 +87,7 @@ class LocationHistoryTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "locationHistoryTableCell", for: indexPath) as? LocationHistoryTableViewCell else {
             fatalError("Cell dequeued was not a LocationHistoryTableViewCell")
         }
-        
-        
-        switch (indexPath.section) {
-        case 0:
-            let object = sections[0]![indexPath.row] as! Location
-            cell.titleLabel.text = object.locationName
-            cell.subtitleLabel.text = "visited \(object.numberOfVisits ?? 0) times, last visited \(object.timeSinceLastVisit ?? 0) min ago"
-        case 1:
-            if let section = sections[1] {
-                let object = section[indexPath.row] as! BeaconEvent
-                let minSinceLastVisit = Int((object.timestamp?.timeIntervalSinceNow)! / 60)
-                cell.titleLabel.text = "\(object.triggerEvent ?? "") \(object.locationName ?? "")"
-                cell.subtitleLabel.text = "visited \(minSinceLastVisit) min ago"
-            }
-        default:
-            cell.titleLabel.text = "None"
-        }
-        
+
         return cell
     }
     
@@ -116,6 +99,31 @@ class LocationHistoryTableViewController: UITableViewController {
             return "Past Locations"
         default:
             return "Past Locations"
+        }
+    }
+    
+    // Mark: - UITableViewDelegate Methods
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let cell = cell as? LocationHistoryTableViewCell else {
+            fatalError("cell to be displayed is not a LocationsTableViewCell")
+        }
+        
+        switch (indexPath.section) {
+        case 0:
+            let object = sections[0]![indexPath.row] as! MostPopularLocation
+            cell.titleLabel.text = object.locationName
+            cell.timesVisitedLabel.text = "Visited \(object.numberOfVisits ?? 0) times"
+            cell.lastVisitedLabel.text = "Last visited \(object.timeSinceLastVisit ?? 0) min ago"
+        case 1:
+            if let section = sections[1] {
+                let object = section[indexPath.row] as! BeaconEvent
+                let minSinceLastVisit = Int((object.timestamp?.timeIntervalSinceNow)! / 60)
+                cell.titleLabel.text = "\(object.triggerEvent ?? "") \(object.locationName ?? "")"
+                cell.timesVisitedLabel.text = "Visited \(minSinceLastVisit) min ago"
+            }
+        default:
+            cell.titleLabel.text = "None"
         }
     }
 }
