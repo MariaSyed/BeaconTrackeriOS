@@ -12,29 +12,35 @@
 import CoreLocation
 
 class BeaconManager {
-    let beaconRegion: CLBeaconRegion
     let locationManager: CLLocationManager
     
-    init(proximityUUID: UUID, identifier: String) {
-        beaconRegion = CLBeaconRegion(proximityUUID: proximityUUID, identifier: identifier)
-        
+    init() {
         locationManager = CLLocationManager()
         locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
-
     }
     
     // MARK: - Public Methods
     
-    func startMonitoring() {
-        print("starting beacon monitoring for region: \(beaconRegion)")
-        locationManager.startMonitoring(for: beaconRegion)
-        // TODO: Remove ranging beacons later
-        locationManager.startRangingBeacons(in: beaconRegion)
+    func startMonitoring(forRegions beaconRegions: [CLBeaconRegion]) {
+        for beaconRegion in beaconRegions {
+            locationManager.startMonitoring(for: beaconRegion)
+        }
     }
     
-    func stopMonitoring() {
-        locationManager.stopMonitoring(for: beaconRegion)
-        locationManager.stopRangingBeacons(in: beaconRegion)
+    func stopMonitoring(forRegions beaconRegions: [CLBeaconRegion]) {
+        for beaconRegion in beaconRegions {
+            locationManager.stopMonitoring(for: beaconRegion)
+        }
+    }
+    
+    func startRanging(forRegion region: CLBeaconRegion) {
+        // TODO: Remove ranging beacons later
+        locationManager.startRangingBeacons(in: region)
+    }
+    
+    func stopRanging(forRegion region: CLBeaconRegion) {
+        // TODO: Remove ranging beacons later
+        locationManager.stopRangingBeacons(in: region)
     }
 }

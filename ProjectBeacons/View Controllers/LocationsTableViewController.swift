@@ -18,20 +18,26 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
     var newPhotoSet: Bool = false
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    let beaconManager = BeaconManager(proximityUUID: UUID(uuidString: "9CFEC685-0722-228D-2189-CFAE06FBE1B5")!, identifier: "Olohuone")
+    let beaconManager = BeaconManager()
+    let regions = [
+        CLBeaconRegion(proximityUUID: UUID(uuidString: "00001111-2222-3333-4444-555566667777")!, major: 0, minor: 1, identifier: "OLD2"),
+        CLBeaconRegion(proximityUUID: UUID(uuidString: "00001111-2222-3333-4444-555566667777")!, major: 0, minor: 2, identifier: "OLD2"),
+        CLBeaconRegion(proximityUUID: UUID(uuidString: "00001111-2222-3333-4444-555566667777")!, major: 1, minor: 0, identifier: "OLD2")
+    ]
     
+    var scanning: Bool = false
+    @IBOutlet weak var scanButton: UIBarButtonItem!
+
     lazy var dataSource = LocationsTableViewDataSource(context: context, matchingName: username ?? "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.topItem?.title = "Back"
-        
         // TableView
         tableView.rowHeight = 80
         tableView.dataSource = dataSource as UITableViewDataSource
         
-        dataSource.refetchFRC()
+        dataSource.performFetch()
         
         // Firebase
         firebaseManager.registerObserver(observer: self)
@@ -42,7 +48,7 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
         
         // Beacons
         beaconManager.locationManager.delegate = self
-        beaconManager.startMonitoring()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,10 +61,22 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func onToggleScan(_ sender: UIBarButtonItem) {
+        scanning = !scanning
+        if scanning == true {
+            beaconManager.startMonitoring(forRegions: regions)
+            scanButton.title = "Stop Scan"
+        } else {
+            beaconManager.stopMonitoring(forRegions: regions)
+            scanButton.title = "Start Scan"
+        }
+    }
+    
     // MARK: - Observer Methods
     
     func performAction() {
-        dataSource.refetchFRC()
+        tableView.beginUpdates()
+        dataSource.performFetch()
         tableView.endUpdates()
         tableView.reloadData()
     }
@@ -90,9 +108,13 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
                 if let timestamp = mostRecentBeaconEvent.timestamp {
                     let secondsPassed = timestamp.timeIntervalSinceNow
                     
-                    let minutesPassed = Int(abs(secondsPassed) / 60)
+                    let minutesPassed = Int(secondsPassed / 60).magnitude
                     
-                    cell.timeLabel?.text? = "\(minutesPassed) min ago"
+                    if minutesPassed > 90 {
+                        cell.timeLabel.text = "at \(timestamp)"
+                    } else {
+                        cell.timeLabel.text = "\(minutesPassed) min ago"
+                    }
                     
                 }
             }
@@ -113,6 +135,7 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
             let beaconEventsArray = Array(beaconEventsSet) as! [BeaconEvent]
             historyVC.beaconEvents = beaconEventsArray
             let navController = UINavigationController(rootViewController: historyVC)
+            navController.navigationBar.topItem?.title = "\(person.name ?? "User")'s Locations"
             self.present(navController, animated: true)
         }
         
@@ -132,26 +155,26 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location manager failed: \(error.localizedDescription)")
     }
-    
-    // TODO: Remove this ranging func later, placed here for testing
-    
-    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-        print("\(username ?? "Unknown User") did range \(beacons)")
-    }
-    
+        
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        let beaconEvent: BeaconEvent = createBeaconEvent(withRegion: region as! CLBeaconRegion, triggerEvent: "enter")
-        firebaseManager.saveBeaconEvent(beaconEvent: beaconEvent, forName: username ?? "Unknown")
         print("\(username ?? "Unknown User") just entered region \(region)")
+        let beaconEvent: BeaconEvent = createBeaconEvent(withRegion: region as! CLBeaconRegion, triggerEvent: "Enter")
+        print("created beacon event: \(beaconEvent)")
+        firebaseManager.saveBeaconEvent(beaconEvent: beaconEvent, forName: username ?? "Unknown")
     }
    
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        let beaconEvent: BeaconEvent = createBeaconEvent(withRegion: region as! CLBeaconRegion, triggerEvent: "exit")
-        firebaseManager.saveBeaconEvent(beaconEvent: beaconEvent, forName: username ?? "Unknown")
         print("\(username ?? "Unknown User") just exitted region \(region)")
+        let beaconEvent: BeaconEvent = createBeaconEvent(withRegion: region as! CLBeaconRegion, triggerEvent: "Exit")
+        firebaseManager.saveBeaconEvent(beaconEvent: beaconEvent, forName: username ?? "Unknown")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        print("Got state \(state.rawValue) for region \(region)")
     }
     
     func createBeaconEvent(withRegion region: CLBeaconRegion, triggerEvent: String) -> BeaconEvent {
+        print("creating BE from region: \(region)")
         // Get major, minor, uuid from region
         let uuid = region.proximityUUID
         let major = region.major ?? 0
@@ -163,7 +186,7 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
         
         // Get timestamp from Date(), username, trigger = triggerEvent
         let timestamp = Date()
-        let triggerEvent = "exit"
+        let triggerEvent = triggerEvent
         
         // Create & return BeaconEvent from the above data
         let beaconEvent = BeaconEvent(context: context)
@@ -178,4 +201,5 @@ class LocationsTableViewController: UITableViewController, CLLocationManagerDele
         
         return beaconEvent
     }
+
 }

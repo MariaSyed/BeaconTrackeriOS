@@ -28,6 +28,7 @@
 		4DD999B2202EE5DE00E56D82 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4DD999B0202EE5DE00E56D82 /* Model.xcdatamodeld */; };
 		4DD999B6202F600B00E56D82 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4DD999B5202F600A00E56D82 /* GoogleService-Info.plist */; };
 		4DE0AF622049D9E700FB0C05 /* LocationsTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE0AF612049D9E700FB0C05 /* LocationsTableViewDataSource.swift */; };
+		4DE0AF66204AF50700FB0C05 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE0AF65204AF50700FB0C05 /* NSDateExtension.swift */; };
 		7EEE397579E55A3F4D7D7979 /* Pods_ProjectBeacons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A431A9FD8F12C0B8DEAAEB19 /* Pods_ProjectBeacons.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 		4DD999B1202EE5DE00E56D82 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		4DD999B5202F600A00E56D82 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4DE0AF612049D9E700FB0C05 /* LocationsTableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewDataSource.swift; sourceTree = "<group>"; };
+		4DE0AF65204AF50700FB0C05 /* NSDateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		A431A9FD8F12C0B8DEAAEB19 /* Pods_ProjectBeacons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ProjectBeacons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F075340ACC8BA38EA86EB2AB /* Pods-ProjectBeacons.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProjectBeacons.release.xcconfig"; path = "Pods/Target Support Files/Pods-ProjectBeacons/Pods-ProjectBeacons.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,6 +160,7 @@
 		4DB8AEAD2028A85800D03118 /* ProjectBeacons */ = {
 			isa = PBXGroup;
 			children = (
+				4DE0AF63204AF4AC00FB0C05 /* Extensions */,
 				4DB14DF6203B6BA500DF8878 /* Managers */,
 				4DB14DD3203977B100DF8878 /* Application Delegate */,
 				4D829319202F7609000E4C75 /* Protocols */,
@@ -189,6 +192,14 @@
 				4DD999B0202EE5DE00E56D82 /* Model.xcdatamodeld */,
 			);
 			path = "Core Data";
+			sourceTree = "<group>";
+		};
+		4DE0AF63204AF4AC00FB0C05 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4DE0AF65204AF50700FB0C05 /* NSDateExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		D17BE277A5A4E45AA4B328A6 /* Pods */ = {
@@ -352,6 +363,7 @@
 				4DB14DCA2038F13500DF8878 /* BeaconEvent+CoreDataClass.swift in Sources */,
 				4DB8AEC42029107400D03118 /* LocationsTableViewCell.swift in Sources */,
 				4D0EAFB020384E04001D6C2E /* Person+CoreDataProperties.swift in Sources */,
+				4DE0AF66204AF50700FB0C05 /* NSDateExtension.swift in Sources */,
 				4D829320202F774B000E4C75 /* Observer.swift in Sources */,
 				4DD999B2202EE5DE00E56D82 /* Model.xcdatamodeld in Sources */,
 				4D0EAFB2203873D8001D6C2E /* LocationHistoryTableViewController.swift in Sources */,

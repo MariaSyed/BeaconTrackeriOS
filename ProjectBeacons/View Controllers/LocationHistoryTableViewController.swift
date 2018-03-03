@@ -40,7 +40,7 @@ class LocationHistoryTableViewController: UITableViewController {
             dictionaryOfSections[0] = [location]
         }
         
-        dictionaryOfSections[1] = beaconEvents
+        dictionaryOfSections[1] = beaconEvents.sorted(by: { $0.timestamp!.compare($1.timestamp! as Date) == .orderedDescending })
     
         return dictionaryOfSections
     }
@@ -62,8 +62,8 @@ class LocationHistoryTableViewController: UITableViewController {
             
             let mostRecentBeaconEvent = filteredEventsByID.reduce(filteredEventsByID[0], { $0.timestamp!.timeIntervalSince1970 > $1.timestamp!.timeIntervalSince1970 ? $0 : $1 })
             
-            let timeSinceLastVisit = Int((mostRecentBeaconEvent.timestamp?.timeIntervalSinceNow)! / 60)
-            return MostPopularLocation(locationID: mostRecentBeaconEvent.locationID ?? "", locationName: mostRecentBeaconEvent.locationName ?? "", numberOfVisits: count, timeSinceLastVisit: timeSinceLastVisit)
+            let latestTimestamp = mostRecentBeaconEvent.timestamp
+            return MostPopularLocation(locationID: mostRecentBeaconEvent.locationID ?? "", locationName: mostRecentBeaconEvent.locationName ?? "", numberOfVisits: count, latestTimestamp: latestTimestamp)
         } else {
             return nil
         }
@@ -114,15 +114,21 @@ class LocationHistoryTableViewController: UITableViewController {
             let object = sections[0]![indexPath.row] as! MostPopularLocation
             cell.titleLabel.text = object.locationName
             cell.timesVisitedLabel.text = "Visited \(object.numberOfVisits ?? 0) times"
-            cell.lastVisitedLabel.text = "Last visited \(object.timeSinceLastVisit ?? 0) min ago"
-            cell.profileImage.image = UIImage(named: object.locationID ?? "0-1")
+            cell.lastVisitedLabel.text = "Last visited at \(object.latestTimestamp?.convertToFormat(format: " HH:mm dd/MM/yyy") ?? "---")"
+            cell.profileImage.image = UIImage(named: object.locationID ?? "SelectPhoto")
         case 1:
             if let section = sections[1] {
                 let object = section[indexPath.row] as! BeaconEvent
-                let minSinceLastVisit = Int((object.timestamp?.timeIntervalSinceNow)! / 60)
+                let minSinceLastVisit = Int((object.timestamp?.timeIntervalSinceNow)! / 60).magnitude
+                
                 cell.titleLabel.text = "\(object.triggerEvent ?? "") \(object.locationName ?? "")"
-                cell.timesVisitedLabel.text = "Visited \(minSinceLastVisit) min ago"
-                cell.profileImage.image = UIImage(named: object.locationID ?? "0-1")
+                cell.profileImage.image = UIImage(named: object.locationID ?? "SelectPhoto")
+                
+                if minSinceLastVisit > 90 {
+                    cell.timesVisitedLabel.text = "Visited at \(object.timestamp?.convertToISO() ?? "---")"
+                } else {
+                    cell.timesVisitedLabel.text = "Visited \(minSinceLastVisit) min ago"
+                }
             }
         default:
             cell.titleLabel.text = "None"

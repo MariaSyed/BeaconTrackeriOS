@@ -52,12 +52,12 @@ class FirebaseDatabaseManager: Observable {
         _ = ref.child("users").observe(DataEventType.value, with: { (snapshot) in
             let userDict = snapshot.value as? [String : [String: AnyObject]] ?? [:]
             
-            print("observed \(userDict)")
+            print("OBSERVED NEW DATA")
             
             self.syncCoreData(withUsers: Array(userDict.keys))
             
             for (_, info) in userDict {
-                if info.isEmpty == false {
+                if !info.isEmpty {
                     self.syncUserWithCoreData(userInfo: info)
                 } else {
                     print("WARNING: no info found")
@@ -79,11 +79,11 @@ class FirebaseDatabaseManager: Observable {
         let newBeaconEvent : [String: Any] = [
             "locationID": beaconEvent.locationID ?? "",
             "locationName": beaconEvent.locationName ?? "",
-            "timestamp": beaconEvent.timestamp ?? "",
+            "timestamp": beaconEvent.timestamp?.convertToISO() ?? "",
             "triggerEvent": beaconEvent.triggerEvent ?? "",
             "major": beaconEvent.major ?? "",
             "minor": beaconEvent.minor ?? "",
-            "uuid": beaconEvent.uuid ?? ""
+            "uuid": (beaconEvent.uuid as UUID?)!.uuidString
         ]
         let newBeaconEventRef = self.ref.child("users/" + name.lowercased() + "/beaconEvents").childByAutoId()
         newBeaconEventRef.setValue(newBeaconEvent)
@@ -160,6 +160,7 @@ class FirebaseDatabaseManager: Observable {
                 let name = userInfo["name"] as? String ?? ""
                 p.name = name
                 
+                // Downlaod image from storage for the person
                 DispatchQueue.global().sync {
                     self.downloadImageFromFirebaseStorage(forName: name, onCompletion: { data in
                         DispatchQueue.main.async {
@@ -174,10 +175,10 @@ class FirebaseDatabaseManager: Observable {
                 
                 
                 // beacon events from firebase
-                let beaconEvents = userInfo["beaconEvents"] as? [[String: Any]] ?? []
+                let beaconEvents = userInfo["beaconEvents"] as? [String: [String: Any]] ?? [:]
                 
                 // save each new beacon event for user from Firebase into CoreData
-                for beaconEvent in beaconEvents {
+                for (_, beaconEvent) in beaconEvents {
                     let locationID = beaconEvent["locationID"] as? String
                     var timestamp: Date?
                     
@@ -187,16 +188,16 @@ class FirebaseDatabaseManager: Observable {
                     if let p = person {
                         if let newBeaconEvent = try BeaconEvent.createUniqueBeaconEvent(withPerson: p, withLocationID: locationID, withTimestamp: timestamp, context: self.context) {
                             
-                            // configure new beacon event with data from firebase
-                            newBeaconEvent.locationID = beaconEvent["locationID"] as? String ?? ""
-                            newBeaconEvent.timestamp = timestamp as NSDate?
-                            newBeaconEvent.locationName = beaconEvent["locationName"] as? String
-                            newBeaconEvent.major = beaconEvent["major"] as? String
-                            newBeaconEvent.minor = beaconEvent["major"] as? String
-                            newBeaconEvent.triggerEvent = beaconEvent["triggerEvent"] as? String
-                            
-                            // add new beacon event to existing person or new person
-                            p.addToBeaconEvents(newBeaconEvent)
+                                // configure new beacon event with data from firebase
+                                newBeaconEvent.locationID = beaconEvent["locationID"] as? String ?? ""
+                                newBeaconEvent.timestamp = timestamp as NSDate?
+                                newBeaconEvent.locationName = beaconEvent["locationName"] as? String
+                                newBeaconEvent.major = beaconEvent["major"] as? String
+                                newBeaconEvent.minor = beaconEvent["major"] as? String
+                                newBeaconEvent.triggerEvent = beaconEvent["triggerEvent"] as? String
+                                
+                                // add new beacon event to existing person or new person
+                                p.addToBeaconEvents(newBeaconEvent)
                         }
                     }
                 }
@@ -211,7 +212,7 @@ class FirebaseDatabaseManager: Observable {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         return dateFormatter.date(from: iso)
     }
-    
+
     private func syncCoreData(withUsers users: Array<String>) {
         // Remove old data from core data
         print("users are \(users)")
@@ -232,10 +233,11 @@ class FirebaseDatabaseManager: Observable {
         let uploadMetadata = StorageMetadata()
         uploadMetadata.contentType = "image/jpeg"
         let uploadTask = imageRef.putData(imageData, metadata: uploadMetadata) { (metadata, error) in
-            guard let metadata = metadata else {
-                fatalError("No metadata found for profile image")
+            if !(metadata != nil) {
+                onCompletion()
+//                onFailure()
+//                print("FATAL ERROR: No metadata found for profile image")
             }
-            print("metadata \(metadata)")
         }
         
         uploadTask.observe(.success) { snapshot in
@@ -249,7 +251,7 @@ class FirebaseDatabaseManager: Observable {
     
     private func downloadImageFromFirebaseStorage(forName name: String, onCompletion: @escaping (_ data: Data) -> Void, onFailure: @escaping () -> Void) {
         let imageRef = storageRef.child(name.lowercased() + "/profileImage.jpg")
-        imageRef.getData(maxSize: 1 * 2048 * 2048) { data, error in
+        imageRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
             if let error = error {
                 print("Error fetching profile image \(error)")
                 onFailure()
@@ -260,7 +262,16 @@ class FirebaseDatabaseManager: Observable {
                 }
             }
         }
-        
     }
+//
+//    struct P {
+//        var ref: NSManagedObjectID! = nil
+//        let name: String
+//    }
     
 }
+
+
+
+
+

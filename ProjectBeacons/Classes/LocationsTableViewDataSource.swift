@@ -27,7 +27,7 @@ class LocationsTableViewDataSource: NSObject, UITableViewDataSource {
         super.init()
     }
     
-    public func refetchFRC() {
+    public func performFetch() {
         do {
             try firstSection.performFetch()
             try secondSection.performFetch()

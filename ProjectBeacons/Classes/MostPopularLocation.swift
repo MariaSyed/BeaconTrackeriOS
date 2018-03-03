@@ -12,12 +12,13 @@ class MostPopularLocation {
     var locationName: String?
     var numberOfVisits: Int?
     var timeSinceLastVisit: Int?
+    var latestTimestamp: NSDate?
     var locationID: String?
     
-    init(locationID: String, locationName: String, numberOfVisits: Int, timeSinceLastVisit: Int) {
+    init(locationID: String, locationName: String, numberOfVisits: Int, latestTimestamp: NSDate?) {
         self.locationID = locationID
         self.locationName = locationName
         self.numberOfVisits = numberOfVisits
-        self.timeSinceLastVisit = timeSinceLastVisit
+        self.latestTimestamp = latestTimestamp
     }
 }

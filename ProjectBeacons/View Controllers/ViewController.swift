@@ -33,7 +33,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.navigationBar.topItem?.title = "Switch account"
         
         firebaseManager.observeAndSyncData()
     }
@@ -53,7 +52,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func onEnter(_ sender: UIButton) {
-        if let personName = nameField.text, personName.count > 0 {
+        if let personName = nameField.text?.trimmingCharacters(in: .whitespaces), personName.count > 0 {
             enterButton.isEnabled = false
             SVProgressHUD.show()
             
@@ -62,7 +61,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             // Update profile picture if image changed
             if let img = imagePreview.image, img != UIImage(named: "SelectPhoto") {
                 // Set new photo
-                imageData = UIImageJPEGRepresentation(img, 0.8) ?? Data()
+                imageData = UIImageJPEGRepresentation(img, 0.3) ?? Data()
             }
             
         
@@ -76,8 +75,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                 }, onFailure: {
                     DispatchQueue.main.async {
+                        SVProgressHUD.dismiss()
                         self.enterButton.isEnabled = true
-                        let alert = UIAlertController(title: "Error", message: "Something went wrong while uploading your image. Check internet connection and try again", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Error", message: "Something went wrong while uploading your image. Check you have internet connection and Firebase storage daily quota limit not reached", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }

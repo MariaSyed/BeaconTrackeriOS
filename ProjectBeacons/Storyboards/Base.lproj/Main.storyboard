@@ -156,7 +156,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ME5-pe-iPS">
                                             <rect key="frame" x="8" y="8" width="270" height="73"/>
                                             <subviews>
-                                                <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="B8P-kF-nm8">
+                                                <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="B8P-kF-nm8">
                                                     <rect key="frame" x="0.0" y="0.0" width="80" height="73"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="80" id="KqH-5j-gJj"/>
@@ -212,12 +212,20 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Locations" id="bGP-rM-JRT">
-                        <barButtonItem key="leftBarButtonItem" title="Switch account" id="VD4-RP-MRa">
+                        <barButtonItem key="leftBarButtonItem" title="Exit" id="VD4-RP-MRa">
                             <connections>
                                 <action selector="onSwitchAccount:" destination="gyA-Uz-U2S" id="krB-5A-BRZ"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Start Scan" id="DqA-Mg-acE">
+                            <connections>
+                                <action selector="onToggleScan:" destination="gyA-Uz-U2S" id="xQs-dg-l7T"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="scanButton" destination="DqA-Mg-acE" id="P1W-3k-Iil"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yTV-fk-uuc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -242,7 +250,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="A64-2u-P3f">
                                             <rect key="frame" x="8" y="8" width="304" height="73.5"/>
                                             <subviews>
-                                                <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="ptV-xt-udB">
+                                                <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SelectPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="ptV-xt-udB">
                                                     <rect key="frame" x="0.0" y="0.0" width="73.5" height="73.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="73.5" id="UkL-wD-2HH"/>
